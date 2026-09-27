@@ -1,0 +1,9 @@
+import { useState } from "react";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { supabase } from "@/integrations/supabase/client";
+export const Route=createFileRoute("/reset-password")({head:()=>({meta:[{title:"Atur Kata Sandi Baru — CherryLuvv"},{name:"description",content:"Atur kata sandi baru akun CherryLuvv Market."},{property:"og:title",content:"Atur Kata Sandi Baru"},{property:"og:description",content:"Pemulihan akun CherryLuvv Market."},{property:"og:type",content:"website"},{name:"twitter:card",content:"summary"}]}),component:ResetPage});
+function ResetPage(){const[p,setP]=useState("");const nav=useNavigate();const valid=typeof window!=="undefined"&&(window.location.hash.includes("type=recovery")||window.location.search.includes("type=recovery"));return <main className="mx-auto max-w-md px-4 py-24"><h1 className="text-3xl font-black">Atur kata sandi baru</h1><p className="mt-2 text-muted-foreground">{valid?"Gunakan minimal 8 karakter yang kuat.":"Buka halaman ini melalui tautan pemulihan di emailmu."}</p>{valid&&<form className="mt-7" onSubmit={async e=>{e.preventDefault();const{error}=await supabase.auth.updateUser({password:p});if(error)toast.error(error.message);else{toast.success("Kata sandi diperbarui");nav({to:"/akun"})}}}><Label htmlFor="new-password">Kata sandi baru</Label><Input id="new-password" type="password" minLength={8} maxLength={72} required value={p} onChange={e=>setP(e.target.value)} className="mt-2 h-11 rounded-xl"/><Button className="mt-4 w-full">Simpan Kata Sandi</Button></form>}</main>}
