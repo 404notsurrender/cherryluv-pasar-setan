@@ -10,33 +10,172 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as CekPesananRouteImport } from './routes/cek-pesanan'
+import { Route as KeranjangRouteImport } from './routes/keranjang'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as ShopRouteImport } from './routes/shop'
+import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
+import { Route as AuthenticatedAkunRouteImport } from './routes/_authenticated/akun'
+import { Route as AuthenticatedCheckoutRouteImport } from './routes/_authenticated/checkout'
+import { Route as ProdukSlugRouteImport } from './routes/produk.$slug'
+import { Route as AuthenticatedPesananOrderIdRouteImport } from './routes/_authenticated/pesanan.$orderId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CekPesananRoute = CekPesananRouteImport.update({
+  id: '/cek-pesanan',
+  path: '/cek-pesanan',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KeranjangRoute = KeranjangRouteImport.update({
+  id: '/keranjang',
+  path: '/keranjang',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ShopRoute = ShopRouteImport.update({
+  id: '/shop',
+  path: '/shop',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedAkunRoute = AuthenticatedAkunRouteImport.update({
+  id: '/akun',
+  path: '/akun',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedCheckoutRoute = AuthenticatedCheckoutRouteImport.update({
+  id: '/checkout',
+  path: '/checkout',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const ProdukSlugRoute = ProdukSlugRouteImport.update({
+  id: '/produk/$slug',
+  path: '/produk/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedPesananOrderIdRoute =
+  AuthenticatedPesananOrderIdRouteImport.update({
+    id: '/pesanan/$orderId',
+    path: '/pesanan/$orderId',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/cek-pesanan': typeof CekPesananRoute
+  '/keranjang': typeof KeranjangRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/shop': typeof ShopRoute
+  '/admin': typeof AuthenticatedAdminRoute
+  '/akun': typeof AuthenticatedAkunRoute
+  '/checkout': typeof AuthenticatedCheckoutRoute
+  '/produk/$slug': typeof ProdukSlugRoute
+  '/pesanan/$orderId': typeof AuthenticatedPesananOrderIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/cek-pesanan': typeof CekPesananRoute
+  '/keranjang': typeof KeranjangRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/shop': typeof ShopRoute
+  '/admin': typeof AuthenticatedAdminRoute
+  '/akun': typeof AuthenticatedAkunRoute
+  '/checkout': typeof AuthenticatedCheckoutRoute
+  '/produk/$slug': typeof ProdukSlugRoute
+  '/pesanan/$orderId': typeof AuthenticatedPesananOrderIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/auth': typeof AuthRoute
+  '/cek-pesanan': typeof CekPesananRoute
+  '/keranjang': typeof KeranjangRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/shop': typeof ShopRoute
+  '/_authenticated/admin': typeof AuthenticatedAdminRoute
+  '/_authenticated/akun': typeof AuthenticatedAkunRoute
+  '/_authenticated/checkout': typeof AuthenticatedCheckoutRoute
+  '/produk/$slug': typeof ProdukSlugRoute
+  '/_authenticated/pesanan/$orderId': typeof AuthenticatedPesananOrderIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/cek-pesanan'
+    | '/keranjang'
+    | '/reset-password'
+    | '/shop'
+    | '/admin'
+    | '/akun'
+    | '/checkout'
+    | '/produk/$slug'
+    | '/pesanan/$orderId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/auth'
+    | '/cek-pesanan'
+    | '/keranjang'
+    | '/reset-password'
+    | '/shop'
+    | '/admin'
+    | '/akun'
+    | '/checkout'
+    | '/produk/$slug'
+    | '/pesanan/$orderId'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/auth'
+    | '/cek-pesanan'
+    | '/keranjang'
+    | '/reset-password'
+    | '/shop'
+    | '/_authenticated/admin'
+    | '/_authenticated/akun'
+    | '/_authenticated/checkout'
+    | '/produk/$slug'
+    | '/_authenticated/pesanan/$orderId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AuthRoute: typeof AuthRoute
+  CekPesananRoute: typeof CekPesananRoute
+  KeranjangRoute: typeof KeranjangRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
+  ShopRoute: typeof ShopRoute
+  ProdukSlugRoute: typeof ProdukSlugRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +187,112 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cek-pesanan': {
+      id: '/cek-pesanan'
+      path: '/cek-pesanan'
+      fullPath: '/cek-pesanan'
+      preLoaderRoute: typeof CekPesananRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/keranjang': {
+      id: '/keranjang'
+      path: '/keranjang'
+      fullPath: '/keranjang'
+      preLoaderRoute: typeof KeranjangRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/shop': {
+      id: '/shop'
+      path: '/shop'
+      fullPath: '/shop'
+      preLoaderRoute: typeof ShopRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/admin': {
+      id: '/_authenticated/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AuthenticatedAdminRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/akun': {
+      id: '/_authenticated/akun'
+      path: '/akun'
+      fullPath: '/akun'
+      preLoaderRoute: typeof AuthenticatedAkunRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/checkout': {
+      id: '/_authenticated/checkout'
+      path: '/checkout'
+      fullPath: '/checkout'
+      preLoaderRoute: typeof AuthenticatedCheckoutRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/produk/$slug': {
+      id: '/produk/$slug'
+      path: '/produk/$slug'
+      fullPath: '/produk/$slug'
+      preLoaderRoute: typeof ProdukSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/pesanan/$orderId': {
+      id: '/_authenticated/pesanan/$orderId'
+      path: '/pesanan/$orderId'
+      fullPath: '/pesanan/$orderId'
+      preLoaderRoute: typeof AuthenticatedPesananOrderIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
+  AuthenticatedAkunRoute: typeof AuthenticatedAkunRoute
+  AuthenticatedCheckoutRoute: typeof AuthenticatedCheckoutRoute
+  AuthenticatedPesananOrderIdRoute: typeof AuthenticatedPesananOrderIdRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAdminRoute: AuthenticatedAdminRoute,
+  AuthenticatedAkunRoute: AuthenticatedAkunRoute,
+  AuthenticatedCheckoutRoute: AuthenticatedCheckoutRoute,
+  AuthenticatedPesananOrderIdRoute: AuthenticatedPesananOrderIdRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AuthRoute: AuthRoute,
+  CekPesananRoute: CekPesananRoute,
+  KeranjangRoute: KeranjangRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
+  ShopRoute: ShopRoute,
+  ProdukSlugRoute: ProdukSlugRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
