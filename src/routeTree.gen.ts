@@ -12,11 +12,13 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as CekPesananRouteImport } from './routes/cek-pesanan'
 import { Route as KeranjangRouteImport } from './routes/keranjang'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as ShopRouteImport } from './routes/shop'
 import { Route as AuthenticatedCheckoutRouteImport } from './routes/_authenticated/checkout'
 import { Route as ProdukSlugRouteImport } from './routes/produk.$slug'
+import { Route as AuthenticatedPesananOrderIdRouteImport } from './routes/_authenticated/pesanan.$orderId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -30,6 +32,11 @@ const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CekPesananRoute = CekPesananRouteImport.update({
+  id: '/cek-pesanan',
+  path: '/cek-pesanan',
   getParentRoute: () => rootRouteImport,
 } as any)
 const KeranjangRoute = KeranjangRouteImport.update({
@@ -57,71 +64,90 @@ const ProdukSlugRoute = ProdukSlugRouteImport.update({
   path: '/produk/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedPesananOrderIdRoute =
+  AuthenticatedPesananOrderIdRouteImport.update({
+    id: '/pesanan/$orderId',
+    path: '/pesanan/$orderId',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/cek-pesanan': typeof CekPesananRoute
   '/keranjang': typeof KeranjangRoute
   '/reset-password': typeof ResetPasswordRoute
   '/shop': typeof ShopRoute
   '/checkout': typeof AuthenticatedCheckoutRoute
   '/produk/$slug': typeof ProdukSlugRoute
+  '/pesanan/$orderId': typeof AuthenticatedPesananOrderIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/cek-pesanan': typeof CekPesananRoute
   '/keranjang': typeof KeranjangRoute
   '/reset-password': typeof ResetPasswordRoute
   '/shop': typeof ShopRoute
   '/checkout': typeof AuthenticatedCheckoutRoute
   '/produk/$slug': typeof ProdukSlugRoute
+  '/pesanan/$orderId': typeof AuthenticatedPesananOrderIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
+  '/cek-pesanan': typeof CekPesananRoute
   '/keranjang': typeof KeranjangRoute
   '/reset-password': typeof ResetPasswordRoute
   '/shop': typeof ShopRoute
   '/_authenticated/checkout': typeof AuthenticatedCheckoutRoute
   '/produk/$slug': typeof ProdukSlugRoute
+  '/_authenticated/pesanan/$orderId': typeof AuthenticatedPesananOrderIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/auth'
+    | '/cek-pesanan'
     | '/keranjang'
     | '/reset-password'
     | '/shop'
     | '/checkout'
     | '/produk/$slug'
+    | '/pesanan/$orderId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/auth'
+    | '/cek-pesanan'
     | '/keranjang'
     | '/reset-password'
     | '/shop'
     | '/checkout'
     | '/produk/$slug'
+    | '/pesanan/$orderId'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/auth'
+    | '/cek-pesanan'
     | '/keranjang'
     | '/reset-password'
     | '/shop'
     | '/_authenticated/checkout'
     | '/produk/$slug'
+    | '/_authenticated/pesanan/$orderId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
+  CekPesananRoute: typeof CekPesananRoute
   KeranjangRoute: typeof KeranjangRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   ShopRoute: typeof ShopRoute
@@ -149,6 +175,13 @@ declare module '@tanstack/react-router' {
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cek-pesanan': {
+      id: '/cek-pesanan'
+      path: '/cek-pesanan'
+      fullPath: '/cek-pesanan'
+      preLoaderRoute: typeof CekPesananRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/keranjang': {
@@ -186,15 +219,24 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProdukSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/pesanan/$orderId': {
+      id: '/_authenticated/pesanan/$orderId'
+      path: '/pesanan/$orderId'
+      fullPath: '/pesanan/$orderId'
+      preLoaderRoute: typeof AuthenticatedPesananOrderIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedCheckoutRoute: typeof AuthenticatedCheckoutRoute
+  AuthenticatedPesananOrderIdRoute: typeof AuthenticatedPesananOrderIdRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedCheckoutRoute: AuthenticatedCheckoutRoute,
+  AuthenticatedPesananOrderIdRoute: AuthenticatedPesananOrderIdRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
@@ -204,6 +246,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
+  CekPesananRoute: CekPesananRoute,
   KeranjangRoute: KeranjangRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   ShopRoute: ShopRoute,
