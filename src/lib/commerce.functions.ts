@@ -32,7 +32,7 @@ export const getProduct = createServerFn({ method: "GET" })
       .select("*, categories(name, slug), product_variants(id,name,price,stock,quantity_value,sort_order)")
       .eq("slug", data.slug).eq("status", "active").maybeSingle();
     if (error) throw new Error("Produk belum dapat dimuat.");
-    return product;
+    return product as unknown as import("@/lib/store-data").Product | null;
   });
 
 const orderSchema = z.object({
