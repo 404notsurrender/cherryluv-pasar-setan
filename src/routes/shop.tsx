@@ -6,8 +6,7 @@ import { ProductCard } from "@/components/store/product-card";
 import { getCatalog } from "@/lib/commerce.functions";
 
 export const Route = createFileRoute("/shop")({
-  validateSearch: (search: Record<string, unknown>): { category?: string } => ({ category: typeof search['category'] === "string" ? search['category'] : undefined }),
-  head: () => ({ meta: [{ title: "Belanja Item Pasar Setan — CherryLuvv Market" },{ name:"description",content:"Katalog lengkap item Pasar Setan: Koin, Sultan, Serpihan Arwah, Matengan, Dupa, dan Kepiting Sungai."},{property:"og:title",content:"Katalog Pasar Setan — CherryLuvv"},{property:"og:description",content:"Temukan semua item Pasar Setan favoritmu."},{property:"og:type",content:"website"},{name:"twitter:card",content:"summary_large_image"}] }),
+  validateSearch: (search: Record<string, unknown>) => ({ category: typeof search["category"] === "string" ? search["category"] : undefined as string | undefined }),
   loader: () => getCatalog(), component: ShopPage,
 });
 

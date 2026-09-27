@@ -23,7 +23,7 @@ export function SiteHeader() {
       <nav className="hidden items-center gap-7 md:flex">{links.map(([label, to]) => <Link key={to} to={to} className="text-sm font-bold text-muted-foreground transition hover:text-primary" activeProps={{ className: "text-primary" }}>{label}</Link>)}</nav>
       <div className="flex items-center gap-2">
         <Button asChild variant="ghost" size="icon" className="relative rounded-full" title="Keranjang"><Link to="/keranjang"><ShoppingBag />{cartCount > 0 && <span className="absolute -right-1 -top-1 grid size-5 place-items-center rounded-full bg-primary text-[10px] font-black text-primary-foreground">{cartCount}</span>}</Link></Button>
-        {user ? <div className="hidden items-center gap-1 md:flex"><Button asChild variant="ghost" className="rounded-full"><Link to="/akun"><UserRound /> Akun</Link></Button><Button variant="ghost" onClick={signOut}>Keluar</Button></div> : <Button asChild className="hidden rounded-full md:inline-flex"><Link to="/auth">Masuk</Link></Button>}
+        {user ? <div className="hidden items-center gap-1 md:flex"><Button asChild variant="ghost" className="rounded-full"><Link to="/akun"><UserRound /> Akun</Link></Button><Button variant="ghost" onClick={signOut}>Keluar</Button></div> : <Button asChild className="hidden rounded-full md:inline-flex"><Link to="/auth" search={{}}>Masuk</Link></Button>}
         <Button variant="ghost" size="icon" className="rounded-full md:hidden" onClick={() => setOpen((v) => !v)} aria-label="Buka menu">{open ? <X /> : <Menu />}</Button>
       </div>
     </div>
