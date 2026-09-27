@@ -81,3 +81,38 @@ export const trackOrder = createServerFn({ method: "POST" })
     if (error) throw new Error("Pesanan belum dapat diperiksa.");
     return found[0] ?? null;
   });
+
+export const getAdminData = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { data: isAdmin } = await context.supabase.rpc("has_role", { _user_id: context.userId, _role: "admin" });
+    if (!isAdmin) throw new Error("Akses admin diperlukan.");
+    const [{ data: orders, error: orderError }, { data: products, error: productError }] = await Promise.all([
+      context.supabase.from("orders").select("*, customers(roblox_username,roblox_display_name,whatsapp), order_items(product_name,variant_name,quantity,subtotal)").order("created_at", { ascending: false }),
+      context.supabase.from("products").select("*, categories(name,slug)").order("created_at", { ascending: false }),
+    ]);
+    if (orderError || productError) throw new Error("Data admin belum dapat dimuat.");
+    return { orders: orders ?? [], products: products ?? [] };
+  });
+
+export const updateOrderStatus = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((value) => z.object({ id: z.string().uuid(), status: z.enum(["pending_payment","payment_confirmed","processing","completed","cancelled"]), paymentStatus: z.enum(["pending","paid","failed","refunded"]) }).parse(value))
+  .handler(async ({ data, context }) => {
+    const { data: isAdmin } = await context.supabase.rpc("has_role", { _user_id: context.userId, _role: "admin" });
+    if (!isAdmin) throw new Error("Akses admin diperlukan.");
+    const { error } = await context.supabase.from("orders").update({ status: data.status, payment_status: data.paymentStatus, updated_at: new Date().toISOString() }).eq("id", data.id);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
+export const updateProduct = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((value) => z.object({ id: z.string().uuid(), name: z.string().trim().min(2).max(100), basePrice: z.number().int().min(0), stock: z.number().int().min(0), status: z.enum(["active","draft","archived"]) }).parse(value))
+  .handler(async ({ data, context }) => {
+    const { data: isAdmin } = await context.supabase.rpc("has_role", { _user_id: context.userId, _role: "admin" });
+    if (!isAdmin) throw new Error("Akses admin diperlukan.");
+    const { error } = await context.supabase.from("products").update({ name: data.name, base_price: data.basePrice, stock: data.stock, status: data.status, updated_at: new Date().toISOString() }).eq("id", data.id);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
