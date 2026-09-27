@@ -116,3 +116,25 @@ export const updateProduct = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     return { ok: true };
   });
+
+export const addProduct = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((value) => z.object({ name: z.string().trim().min(2).max(100), slug: z.string().trim().regex(/^[a-z0-9-]+$/).max(100), categoryId: z.string().uuid(), description: z.string().trim().min(10).max(1000), basePrice: z.number().int().min(0), stock: z.number().int().min(0), imageKey: z.enum(["coins","shards","food"]) }).parse(value))
+  .handler(async ({ data, context }) => {
+    const { data: isAdmin } = await context.supabase.rpc("has_role", { _user_id: context.userId, _role: "admin" });
+    if (!isAdmin) throw new Error("Akses admin diperlukan.");
+    const { error } = await context.supabase.from("products").insert({ category_id: data.categoryId, name: data.name, slug: data.slug, description: data.description, image_key: data.imageKey, base_price: data.basePrice, stock: data.stock });
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
+export const archiveProduct = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((value) => z.object({ id: z.string().uuid() }).parse(value))
+  .handler(async ({ data, context }) => {
+    const { data: isAdmin } = await context.supabase.rpc("has_role", { _user_id: context.userId, _role: "admin" });
+    if (!isAdmin) throw new Error("Akses admin diperlukan.");
+    const { error } = await context.supabase.from("products").update({ status: "archived", updated_at: new Date().toISOString() }).eq("id", data.id);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
