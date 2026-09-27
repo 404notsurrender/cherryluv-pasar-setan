@@ -16,6 +16,8 @@ import { Route as CekPesananRouteImport } from './routes/cek-pesanan'
 import { Route as KeranjangRouteImport } from './routes/keranjang'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as ShopRouteImport } from './routes/shop'
+import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
+import { Route as AuthenticatedAkunRouteImport } from './routes/_authenticated/akun'
 import { Route as AuthenticatedCheckoutRouteImport } from './routes/_authenticated/checkout'
 import { Route as ProdukSlugRouteImport } from './routes/produk.$slug'
 import { Route as AuthenticatedPesananOrderIdRouteImport } from './routes/_authenticated/pesanan.$orderId'
@@ -54,6 +56,16 @@ const ShopRoute = ShopRouteImport.update({
   path: '/shop',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedAkunRoute = AuthenticatedAkunRouteImport.update({
+  id: '/akun',
+  path: '/akun',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedCheckoutRoute = AuthenticatedCheckoutRouteImport.update({
   id: '/checkout',
   path: '/checkout',
@@ -78,6 +90,8 @@ export interface FileRoutesByFullPath {
   '/keranjang': typeof KeranjangRoute
   '/reset-password': typeof ResetPasswordRoute
   '/shop': typeof ShopRoute
+  '/admin': typeof AuthenticatedAdminRoute
+  '/akun': typeof AuthenticatedAkunRoute
   '/checkout': typeof AuthenticatedCheckoutRoute
   '/produk/$slug': typeof ProdukSlugRoute
   '/pesanan/$orderId': typeof AuthenticatedPesananOrderIdRoute
@@ -89,6 +103,8 @@ export interface FileRoutesByTo {
   '/keranjang': typeof KeranjangRoute
   '/reset-password': typeof ResetPasswordRoute
   '/shop': typeof ShopRoute
+  '/admin': typeof AuthenticatedAdminRoute
+  '/akun': typeof AuthenticatedAkunRoute
   '/checkout': typeof AuthenticatedCheckoutRoute
   '/produk/$slug': typeof ProdukSlugRoute
   '/pesanan/$orderId': typeof AuthenticatedPesananOrderIdRoute
@@ -102,6 +118,8 @@ export interface FileRoutesById {
   '/keranjang': typeof KeranjangRoute
   '/reset-password': typeof ResetPasswordRoute
   '/shop': typeof ShopRoute
+  '/_authenticated/admin': typeof AuthenticatedAdminRoute
+  '/_authenticated/akun': typeof AuthenticatedAkunRoute
   '/_authenticated/checkout': typeof AuthenticatedCheckoutRoute
   '/produk/$slug': typeof ProdukSlugRoute
   '/_authenticated/pesanan/$orderId': typeof AuthenticatedPesananOrderIdRoute
@@ -115,6 +133,8 @@ export interface FileRouteTypes {
     | '/keranjang'
     | '/reset-password'
     | '/shop'
+    | '/admin'
+    | '/akun'
     | '/checkout'
     | '/produk/$slug'
     | '/pesanan/$orderId'
@@ -126,6 +146,8 @@ export interface FileRouteTypes {
     | '/keranjang'
     | '/reset-password'
     | '/shop'
+    | '/admin'
+    | '/akun'
     | '/checkout'
     | '/produk/$slug'
     | '/pesanan/$orderId'
@@ -138,6 +160,8 @@ export interface FileRouteTypes {
     | '/keranjang'
     | '/reset-password'
     | '/shop'
+    | '/_authenticated/admin'
+    | '/_authenticated/akun'
     | '/_authenticated/checkout'
     | '/produk/$slug'
     | '/_authenticated/pesanan/$orderId'
@@ -205,6 +229,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ShopRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/admin': {
+      id: '/_authenticated/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AuthenticatedAdminRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/akun': {
+      id: '/_authenticated/akun'
+      path: '/akun'
+      fullPath: '/akun'
+      preLoaderRoute: typeof AuthenticatedAkunRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/checkout': {
       id: '/_authenticated/checkout'
       path: '/checkout'
@@ -230,11 +268,15 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
+  AuthenticatedAkunRoute: typeof AuthenticatedAkunRoute
   AuthenticatedCheckoutRoute: typeof AuthenticatedCheckoutRoute
   AuthenticatedPesananOrderIdRoute: typeof AuthenticatedPesananOrderIdRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAdminRoute: AuthenticatedAdminRoute,
+  AuthenticatedAkunRoute: AuthenticatedAkunRoute,
   AuthenticatedCheckoutRoute: AuthenticatedCheckoutRoute,
   AuthenticatedPesananOrderIdRoute: AuthenticatedPesananOrderIdRoute,
 }
