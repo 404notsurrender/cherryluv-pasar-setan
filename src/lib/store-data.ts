@@ -2,7 +2,7 @@ import coinsImage from "@/assets/product-coins.jpg";
 import shardsImage from "@/assets/product-shards.jpg";
 import foodImage from "@/assets/product-food.jpg";
 
-export type Variant = { id: string; name: string; price: number; stock: number; quantity_value: number };
+export type Variant = { id: string; name: string; price: number; stock: number; quantity_value: number; sort_order?: number };
 export type Product = {
   id: string;
   name: string;
