@@ -8,6 +8,20 @@
       "when": 1790538172359,
       "tag": "0000_create_cherryluvv_commerce",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1790628671108,
+      "tag": "0001_payment_status_enums",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1790628709527,
+      "tag": "0002_pakasir_payments",
+      "breakpoints": true
     }
   ]
 }

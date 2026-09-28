@@ -142,12 +142,16 @@ export type Database = {
         Row: {
           created_at: string
           customer_id: string
+          expires_at: string | null
           id: string
           idempotency_key: string
           notes: string | null
           order_number: string
+          paid_at: string | null
+          payment_gateway: string
           payment_method: string
           payment_status: Database["public"]["Enums"]["payment_status"]
+          payment_transaction_id: string | null
           status: Database["public"]["Enums"]["order_status"]
           total_amount: number
           updated_at: string
@@ -156,12 +160,16 @@ export type Database = {
         Insert: {
           created_at?: string
           customer_id: string
+          expires_at?: string | null
           id?: string
           idempotency_key: string
           notes?: string | null
           order_number: string
+          paid_at?: string | null
+          payment_gateway?: string
           payment_method: string
           payment_status?: Database["public"]["Enums"]["payment_status"]
+          payment_transaction_id?: string | null
           status?: Database["public"]["Enums"]["order_status"]
           total_amount: number
           updated_at?: string
@@ -170,12 +178,16 @@ export type Database = {
         Update: {
           created_at?: string
           customer_id?: string
+          expires_at?: string | null
           id?: string
           idempotency_key?: string
           notes?: string | null
           order_number?: string
+          paid_at?: string | null
+          payment_gateway?: string
           payment_method?: string
           payment_status?: Database["public"]["Enums"]["payment_status"]
+          payment_transaction_id?: string | null
           status?: Database["public"]["Enums"]["order_status"]
           total_amount?: number
           updated_at?: string
@@ -195,34 +207,49 @@ export type Database = {
         Row: {
           amount: number
           created_at: string
+          expires_at: string | null
+          gateway: string
           id: string
           method: string
           order_id: string
           paid_at: string | null
           provider_reference: string | null
+          qr_string: string | null
+          raw_reference: Json | null
           status: Database["public"]["Enums"]["payment_status"]
+          transaction_id: string | null
           updated_at: string
         }
         Insert: {
           amount: number
           created_at?: string
+          expires_at?: string | null
+          gateway?: string
           id?: string
           method: string
           order_id: string
           paid_at?: string | null
           provider_reference?: string | null
+          qr_string?: string | null
+          raw_reference?: Json | null
           status?: Database["public"]["Enums"]["payment_status"]
+          transaction_id?: string | null
           updated_at?: string
         }
         Update: {
           amount?: number
           created_at?: string
+          expires_at?: string | null
+          gateway?: string
           id?: string
           method?: string
           order_id?: string
           paid_at?: string | null
           provider_reference?: string | null
+          qr_string?: string | null
+          raw_reference?: Json | null
           status?: Database["public"]["Enums"]["payment_status"]
+          transaction_id?: string | null
           updated_at?: string
         }
         Relationships: [
@@ -416,11 +443,16 @@ export type Database = {
         }
         Returns: string
       }
+      expire_order: { Args: { p_order_number: string }; Returns: undefined }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
           _user_id: string
         }
+        Returns: boolean
+      }
+      mark_order_paid: {
+        Args: { p_amount: number; p_order_number: string; p_reference: Json }
         Returns: boolean
       }
       track_order: {
@@ -444,7 +476,9 @@ export type Database = {
         | "processing"
         | "completed"
         | "cancelled"
-      payment_status: "pending" | "paid" | "failed" | "refunded"
+        | "paid"
+        | "expired"
+      payment_status: "pending" | "paid" | "failed" | "refunded" | "expired"
       product_status: "active" | "draft" | "archived"
     }
     CompositeTypes: {
@@ -580,8 +614,10 @@ export const Constants = {
         "processing",
         "completed",
         "cancelled",
+        "paid",
+        "expired",
       ],
-      payment_status: ["pending", "paid", "failed", "refunded"],
+      payment_status: ["pending", "paid", "failed", "refunded", "expired"],
       product_status: ["active", "draft", "archived"],
     },
   },
