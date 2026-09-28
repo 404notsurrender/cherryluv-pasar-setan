@@ -20,7 +20,9 @@ import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/
 import { Route as AuthenticatedAkunRouteImport } from './routes/_authenticated/akun'
 import { Route as AuthenticatedCheckoutRouteImport } from './routes/_authenticated/checkout'
 import { Route as ProdukSlugRouteImport } from './routes/produk.$slug'
+import { Route as AuthenticatedBayarOrderIdRouteImport } from './routes/_authenticated/bayar.$orderId'
 import { Route as AuthenticatedPesananOrderIdRouteImport } from './routes/_authenticated/pesanan.$orderId'
+import { Route as ApiPublicWebhooksPakasirRouteImport } from './routes/api/public/webhooks/pakasir'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -76,11 +78,23 @@ const ProdukSlugRoute = ProdukSlugRouteImport.update({
   path: '/produk/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedBayarOrderIdRoute =
+  AuthenticatedBayarOrderIdRouteImport.update({
+    id: '/bayar/$orderId',
+    path: '/bayar/$orderId',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedPesananOrderIdRoute =
   AuthenticatedPesananOrderIdRouteImport.update({
     id: '/pesanan/$orderId',
     path: '/pesanan/$orderId',
     getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const ApiPublicWebhooksPakasirRoute =
+  ApiPublicWebhooksPakasirRouteImport.update({
+    id: '/api/public/webhooks/pakasir',
+    path: '/api/public/webhooks/pakasir',
+    getParentRoute: () => rootRouteImport,
   } as any)
 
 export interface FileRoutesByFullPath {
@@ -94,7 +108,9 @@ export interface FileRoutesByFullPath {
   '/akun': typeof AuthenticatedAkunRoute
   '/checkout': typeof AuthenticatedCheckoutRoute
   '/produk/$slug': typeof ProdukSlugRoute
+  '/bayar/$orderId': typeof AuthenticatedBayarOrderIdRoute
   '/pesanan/$orderId': typeof AuthenticatedPesananOrderIdRoute
+  '/api/public/webhooks/pakasir': typeof ApiPublicWebhooksPakasirRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -107,7 +123,9 @@ export interface FileRoutesByTo {
   '/akun': typeof AuthenticatedAkunRoute
   '/checkout': typeof AuthenticatedCheckoutRoute
   '/produk/$slug': typeof ProdukSlugRoute
+  '/bayar/$orderId': typeof AuthenticatedBayarOrderIdRoute
   '/pesanan/$orderId': typeof AuthenticatedPesananOrderIdRoute
+  '/api/public/webhooks/pakasir': typeof ApiPublicWebhooksPakasirRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -122,7 +140,9 @@ export interface FileRoutesById {
   '/_authenticated/akun': typeof AuthenticatedAkunRoute
   '/_authenticated/checkout': typeof AuthenticatedCheckoutRoute
   '/produk/$slug': typeof ProdukSlugRoute
+  '/_authenticated/bayar/$orderId': typeof AuthenticatedBayarOrderIdRoute
   '/_authenticated/pesanan/$orderId': typeof AuthenticatedPesananOrderIdRoute
+  '/api/public/webhooks/pakasir': typeof ApiPublicWebhooksPakasirRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -137,7 +157,9 @@ export interface FileRouteTypes {
     | '/akun'
     | '/checkout'
     | '/produk/$slug'
+    | '/bayar/$orderId'
     | '/pesanan/$orderId'
+    | '/api/public/webhooks/pakasir'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -150,7 +172,9 @@ export interface FileRouteTypes {
     | '/akun'
     | '/checkout'
     | '/produk/$slug'
+    | '/bayar/$orderId'
     | '/pesanan/$orderId'
+    | '/api/public/webhooks/pakasir'
   id:
     | '__root__'
     | '/'
@@ -164,7 +188,9 @@ export interface FileRouteTypes {
     | '/_authenticated/akun'
     | '/_authenticated/checkout'
     | '/produk/$slug'
+    | '/_authenticated/bayar/$orderId'
     | '/_authenticated/pesanan/$orderId'
+    | '/api/public/webhooks/pakasir'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -176,6 +202,7 @@ export interface RootRouteChildren {
   ResetPasswordRoute: typeof ResetPasswordRoute
   ShopRoute: typeof ShopRoute
   ProdukSlugRoute: typeof ProdukSlugRoute
+  ApiPublicWebhooksPakasirRoute: typeof ApiPublicWebhooksPakasirRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -257,12 +284,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProdukSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/bayar/$orderId': {
+      id: '/_authenticated/bayar/$orderId'
+      path: '/bayar/$orderId'
+      fullPath: '/bayar/$orderId'
+      preLoaderRoute: typeof AuthenticatedBayarOrderIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/pesanan/$orderId': {
       id: '/_authenticated/pesanan/$orderId'
       path: '/pesanan/$orderId'
       fullPath: '/pesanan/$orderId'
       preLoaderRoute: typeof AuthenticatedPesananOrderIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/api/public/webhooks/pakasir': {
+      id: '/api/public/webhooks/pakasir'
+      path: '/api/public/webhooks/pakasir'
+      fullPath: '/api/public/webhooks/pakasir'
+      preLoaderRoute: typeof ApiPublicWebhooksPakasirRouteImport
+      parentRoute: typeof rootRouteImport
     }
   }
 }
@@ -271,6 +312,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
   AuthenticatedAkunRoute: typeof AuthenticatedAkunRoute
   AuthenticatedCheckoutRoute: typeof AuthenticatedCheckoutRoute
+  AuthenticatedBayarOrderIdRoute: typeof AuthenticatedBayarOrderIdRoute
   AuthenticatedPesananOrderIdRoute: typeof AuthenticatedPesananOrderIdRoute
 }
 
@@ -278,6 +320,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminRoute: AuthenticatedAdminRoute,
   AuthenticatedAkunRoute: AuthenticatedAkunRoute,
   AuthenticatedCheckoutRoute: AuthenticatedCheckoutRoute,
+  AuthenticatedBayarOrderIdRoute: AuthenticatedBayarOrderIdRoute,
   AuthenticatedPesananOrderIdRoute: AuthenticatedPesananOrderIdRoute,
 }
 
@@ -293,6 +336,7 @@ const rootRouteChildren: RootRouteChildren = {
   ResetPasswordRoute: ResetPasswordRoute,
   ShopRoute: ShopRoute,
   ProdukSlugRoute: ProdukSlugRoute,
+  ApiPublicWebhooksPakasirRoute: ApiPublicWebhooksPakasirRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
