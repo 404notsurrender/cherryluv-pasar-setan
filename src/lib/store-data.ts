@@ -50,4 +50,5 @@ export const statusLabel: Record<string, string> = {
   paid: "Lunas",
   failed: "Gagal",
   refunded: "Dikembalikan",
+  expired: "Kedaluwarsa",
 };
