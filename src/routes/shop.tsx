@@ -6,7 +6,7 @@ import { ProductCard } from "@/components/store/product-card";
 import { getCatalog } from "@/lib/commerce.functions";
 
 export const Route = createFileRoute("/shop")({
-  validateSearch: (search: Record<string, unknown>): { category?: string } => ({ category: typeof search["category"] === "string" ? search["category"] : undefined }),
+  validateSearch: (search: Record<string, unknown>): { category?: string | undefined } => ({ category: typeof search["category"] === "string" ? search["category"] : undefined }),
   loader: () => getCatalog(), component: ShopPage,
 });
 
