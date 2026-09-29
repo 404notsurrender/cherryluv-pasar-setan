@@ -35,7 +35,7 @@ export async function createPakasirTransaction(orderNumber: string, amount: numb
     throw new Error("QRIS tidak diterima dari penyedia pembayaran.");
   }
   const exp = pick(p, "expired_at", "expires_at", "expiry");
-  const txId = pick(p, "transaction_id", "id", "reference");
+  const txId = pick(p, "txn_id", "transaction_id", "id", "reference");
   return { qrString: qr, expiresAt: typeof exp === "string" ? exp : null, transactionId: txId != null ? String(txId) : null, raw: body };
 }
 
