@@ -41,7 +41,7 @@ const orderSchema = z.object({
   whatsapp: z.string().trim().regex(/^\+?[0-9]{9,15}$/),
   discordUsername: z.string().trim().max(50).optional().default(""),
   notes: z.string().trim().max(500).optional().default(""),
-  paymentMethod: z.enum(["QRIS", "DANA", "GoPay", "Bank Transfer"]),
+  paymentMethod: z.literal("QRIS"),
   idempotencyKey: z.string().uuid(),
   items: z.array(z.object({ product_id: z.string().uuid(), variant_id: z.string().uuid().nullable(), quantity: z.number().int().min(1).max(99) })).min(1).max(30),
 });
@@ -97,7 +97,7 @@ export const getAdminData = createServerFn({ method: "GET" })
 
 export const updateOrderStatus = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((value) => z.object({ id: z.string().uuid(), status: z.enum(["pending_payment","payment_confirmed","processing","completed","cancelled"]), paymentStatus: z.enum(["pending","paid","failed","refunded"]) }).parse(value))
+  .inputValidator((value) => z.object({ id: z.string().uuid(), status: z.enum(["pending_payment","payment_confirmed","processing","completed","cancelled","paid","expired"]), paymentStatus: z.enum(["pending","paid","failed","refunded","expired"]) }).parse(value))
   .handler(async ({ data, context }) => {
     const { data: isAdmin } = await context.supabase.rpc("has_role", { _user_id: context.userId, _role: "admin" });
     if (!isAdmin) throw new Error("Akses admin diperlukan.");
