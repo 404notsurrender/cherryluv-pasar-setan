@@ -18,7 +18,7 @@ export function SiteHeader() {
     <div className="mx-auto flex h-18 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
       <Link to="/" className="flex items-center gap-2.5" aria-label="MDZ">
         <span className="grid size-10 place-items-center rounded-xl bg-primary text-primary-foreground shadow-pink"><Cherry className="size-5" /></span>
-        <span><b className="block text-base font-black leading-none text-foreground">MDZ Store</b><small className="text-[10px] font-bold uppercase tracking-wide text-primary">Pasar Setan Market</small></span>
+        <span><b className="block text-base font-black leading-none text-foreground">MDZ Store</b><small className="text-[10px] font-bold uppercase tracking-wide text-primary">Penyedia Item Game Roblox</small></span>
       </Link>
       <nav className="hidden items-center gap-7 md:flex">{links.map(([label, to]) => <Link key={to} to={to} className="text-sm font-bold text-muted-foreground transition hover:text-primary" activeProps={{ className: "text-primary" }}>{label}</Link>)}</nav>
       <div className="flex items-center gap-2">
