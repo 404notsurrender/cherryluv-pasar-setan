@@ -7,10 +7,10 @@ import heroImage from "@/assets/cherryluvv-hero.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({ meta: [
-    { title: "CherryLuvv Market — Item Pasar Setan, Cepat & Aman" },
+    { title: "MDZ Store — Item Roblox, Cepat & Aman" },
     { name: "description", content: "Beli Koin, Sultan, Serpihan Arwah, Matengan, Dupa, dan Kepiting Sungai khusus game Pasar Setan Roblox." },
-    { property: "og:title", content: "CherryLuvv Market — Item Pasar Setan" },
-    { property: "og:description", content: "Item Pasar Setan, Cepat & Aman." },
+    { property: "og:title", content: "MDZ Store — Item Roblox" },
+    { property: "og:description", content: "Item Roblox, Cepat & Aman." },
     { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" },
   ]}),
   loader: () => getCatalog(), component: HomePage,
@@ -25,9 +25,9 @@ function HomePage() {
       <div className="relative mx-auto flex min-h-[680px] max-w-7xl items-center px-4 pb-24 pt-16 sm:px-6 lg:min-h-[760px] lg:px-8">
         <div className="max-w-2xl">
           <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-background/10 px-4 py-2 text-sm font-bold backdrop-blur"><Sparkles className="size-4 text-primary" /> Marketplace khusus Pasar Setan</div>
-          <h1 className="mt-6 text-5xl font-black leading-[.95] sm:text-7xl lg:text-8xl">CherryLuvv<br/><span className="text-primary">Market</span></h1>
-          <p className="mt-5 text-xl font-extrabold sm:text-2xl">Jual Item Pasar Setan Roblox</p>
-          <p className="mt-3 max-w-lg text-base leading-7 text-footer-muted sm:text-lg">Item Pasar Setan, Cepat & Aman. Pilih item favoritmu, checkout praktis, lalu tim Cherry langsung memproses pesanan.</p>
+          <h1 className="mt-6 text-5xl font-black leading-[.95] sm:text-7xl lg:text-8xl">MDZ Store<br/><span className="text-primary">Market</span></h1>
+          <p className="mt-5 text-xl font-extrabold sm:text-2xl">Jual Item Roblox</p>
+          <p className="mt-3 max-w-lg text-base leading-7 text-footer-muted sm:text-lg">Item Roblox, Cepat & Aman. Pilih item favoritmu, checkout praktis, lalu tim Cherry langsung memproses pesanan.</p>
           <div className="mt-8 flex flex-wrap gap-3"><Button asChild size="lg" className="h-12 rounded-full px-6 shadow-pink"><Link to="/shop" search={{}}>Belanja Sekarang <ArrowRight /></Link></Button><Button asChild size="lg" variant="outline" className="h-12 rounded-full border-footer-muted/50 bg-background/10 px-6 text-footer-foreground hover:bg-background/20"><Link to="/shop" search={{}}>Lihat Semua Item</Link></Button></div>
         </div>
       </div>
