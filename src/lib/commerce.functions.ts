@@ -19,21 +19,50 @@ function publicClient() {
 
 export const getCatalog = createServerFn({ method: "GET" }).handler(async () => {
   const { data, error } = await publicClient().from("products")
-    .select("*, categories(name, slug), product_variants(id,name,price,stock,quantity_value,sort_order)")
-    .eq("status", "active").order("popularity", { ascending: false });
+    .select("*, categories(name, slug, parent_id), product_variants(id,name,price,stock,quantity_value,sort_order,active)")
+    .eq("status", "active").order("sort_order").order("popularity", { ascending: false });
   if (error) throw new Error("Katalog belum dapat dimuat.");
-  return data;
+  return data.map((p) => ({ ...p, product_variants: (p.product_variants ?? []).filter((v) => v.active) }));
+});
+
+export const getStorefront = createServerFn({ method: "GET" }).handler(async () => {
+  const c = publicClient();
+  const [cats, products] = await Promise.all([
+    c.from("categories").select("id,name,slug,description,icon,sort_order,parent_id").eq("active", true).order("sort_order"),
+    c.from("products").select("*, categories(name, slug, parent_id), product_variants(id,name,price,stock,quantity_value,sort_order,active)").eq("status", "active").order("sort_order").order("popularity", { ascending: false }),
+  ]);
+  if (cats.error || products.error) throw new Error("Katalog belum dapat dimuat.");
+  return { categories: cats.data, products: products.data.map((p) => ({ ...p, product_variants: (p.product_variants ?? []).filter((v) => v.active) })) };
 });
 
 export const getProduct = createServerFn({ method: "GET" })
   .inputValidator((value) => z.object({ slug: z.string().trim().min(1).max(100) }).parse(value))
   .handler(async ({ data }) => {
     const { data: product, error } = await publicClient().from("products")
-      .select("*, categories(name, slug), product_variants(id,name,price,stock,quantity_value,sort_order)")
+      .select("*, categories(name, slug, parent_id), product_variants(id,name,price,stock,quantity_value,sort_order,active)")
       .eq("slug", data.slug).eq("status", "active").maybeSingle();
     if (error) throw new Error("Produk belum dapat dimuat.");
-    return product as unknown as import("@/lib/store-data").Product | null;
+    if (!product) return null;
+    let pricing_rule = null;
+    if (product.pricing_type === "koin" || product.pricing_type === "robux_gift") {
+      const { data: rule } = await publicClient().from("pricing_rules").select("key,name,rate,unit,minimum_amount,increment").eq("key", product.pricing_type).maybeSingle();
+      pricing_rule = rule;
+    }
+    let parent = null;
+    if (product.categories?.parent_id) {
+      const { data: pc } = await publicClient().from("categories").select("name,slug").eq("id", product.categories.parent_id).maybeSingle();
+      parent = pc;
+    }
+    return { ...product, parent_category: parent, pricing_rule, product_variants: (product.product_variants ?? []).filter((v) => v.active) } as unknown as import("@/lib/store-data").Product & { parent_category: { name: string; slug: string } | null };
   });
+
+function friendlyOrderError(m: string) {
+  if (m.includes("Invalid amount")) return "Jumlah tidak sesuai minimum atau kelipatan yang berlaku.";
+  if (m.includes("stock")) return "Stok tidak mencukupi.";
+  if (m.includes("Login data")) return "Data login Roblox wajib diisi.";
+  if (m.includes("unavailable")) return "Produk sedang tidak tersedia.";
+  return "Pesanan gagal dibuat. Periksa kembali datamu.";
+}
 
 const orderSchema = z.object({
   robloxUsername: z.string().trim().min(3).max(20).regex(/^[A-Za-z0-9_]+$/),
@@ -43,7 +72,8 @@ const orderSchema = z.object({
   notes: z.string().trim().max(500).optional().default(""),
   paymentMethod: z.literal("QRIS"),
   idempotencyKey: z.string().uuid(),
-  items: z.array(z.object({ product_id: z.string().uuid(), variant_id: z.string().uuid().nullable(), quantity: z.number().int().min(1).max(99) })).min(1).max(30),
+  items: z.array(z.object({ product_id: z.string().uuid(), variant_id: z.string().uuid().nullable(), quantity: z.number().int().min(1).max(99), amount: z.number().int().positive().max(1_000_000_000).optional() })).min(1).max(30),
+  credentials: z.object({ username: z.string().trim().min(3).max(50), password: z.string().min(1).max(200), backupCode: z.string().trim().max(200).optional().default("") }).optional(),
 });
 
 export const createOrder = createServerFn({ method: "POST" })
@@ -59,8 +89,9 @@ export const createOrder = createServerFn({ method: "POST" })
       p_payment_method: data.paymentMethod,
       p_items: data.items,
       p_idempotency_key: data.idempotencyKey,
+      ...(data.credentials ? { p_credentials: { username: data.credentials.username, password: data.credentials.password, backup_code: data.credentials.backupCode } } : {}),
     });
-    if (error) throw new Error(error.message);
+    if (error) throw new Error(friendlyOrderError(error.message));
     return { orderNumber };
   });
 
