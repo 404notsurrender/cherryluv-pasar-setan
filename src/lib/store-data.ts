@@ -17,7 +17,7 @@ export type Product = {
   featured: boolean;
   category_id: string;
   status: "active" | "draft" | "archived";
-  pricing_type?: "fixed" | "koin" | "robux_gift" | "robux_login";
+  pricing_type?: string;
   sort_order?: number;
   pricing_rule?: PricingRule | null;
   categories?: { name: string; slug: string } | null;
