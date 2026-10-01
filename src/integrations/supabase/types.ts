@@ -16,33 +16,47 @@ export type Database = {
     Tables: {
       categories: {
         Row: {
+          active: boolean
           created_at: string
           description: string | null
           icon: string
           id: string
           name: string
+          parent_id: string | null
           slug: string
           sort_order: number
         }
         Insert: {
+          active?: boolean
           created_at?: string
           description?: string | null
           icon?: string
           id?: string
           name: string
+          parent_id?: string | null
           slug: string
           sort_order?: number
         }
         Update: {
+          active?: boolean
           created_at?: string
           description?: string | null
           icon?: string
           id?: string
           name?: string
+          parent_id?: string | null
           slug?: string
           sort_order?: number
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "categories_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       customers: {
         Row: {
@@ -77,11 +91,96 @@ export type Database = {
         }
         Relationships: []
       }
+      notifications: {
+        Row: {
+          channel: string
+          created_at: string
+          error: string | null
+          id: string
+          message: string
+          order_id: string
+          sent_at: string | null
+          status: string
+        }
+        Insert: {
+          channel: string
+          created_at?: string
+          error?: string | null
+          id?: string
+          message: string
+          order_id: string
+          sent_at?: string | null
+          status?: string
+        }
+        Update: {
+          channel?: string
+          created_at?: string
+          error?: string | null
+          id?: string
+          message?: string
+          order_id?: string
+          sent_at?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notifications_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      order_credentials: {
+        Row: {
+          backup_code: string | null
+          created_at: string
+          order_id: string
+          roblox_password: string | null
+          roblox_username: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          backup_code?: string | null
+          created_at?: string
+          order_id: string
+          roblox_password?: string | null
+          roblox_username: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          backup_code?: string | null
+          created_at?: string
+          order_id?: string
+          roblox_password?: string | null
+          roblox_username?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "order_credentials_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: true
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       order_items: {
         Row: {
+          category_name: string | null
           created_at: string
+          currency: string
           id: string
+          item_amount: number | null
           order_id: string
+          pricing_meta: Json | null
+          pricing_rate: number | null
+          pricing_unit: number | null
           product_id: string
           product_name: string
           quantity: number
@@ -91,9 +190,15 @@ export type Database = {
           variant_name: string | null
         }
         Insert: {
+          category_name?: string | null
           created_at?: string
+          currency?: string
           id?: string
+          item_amount?: number | null
           order_id: string
+          pricing_meta?: Json | null
+          pricing_rate?: number | null
+          pricing_unit?: number | null
           product_id: string
           product_name: string
           quantity: number
@@ -103,9 +208,15 @@ export type Database = {
           variant_name?: string | null
         }
         Update: {
+          category_name?: string | null
           created_at?: string
+          currency?: string
           id?: string
+          item_amount?: number | null
           order_id?: string
+          pricing_meta?: Json | null
+          pricing_rate?: number | null
+          pricing_unit?: number | null
           product_id?: string
           product_name?: string
           quantity?: number
@@ -262,6 +373,36 @@ export type Database = {
           },
         ]
       }
+      pricing_rules: {
+        Row: {
+          increment: number
+          key: string
+          minimum_amount: number
+          name: string
+          rate: number
+          unit: number
+          updated_at: string
+        }
+        Insert: {
+          increment?: number
+          key: string
+          minimum_amount?: number
+          name: string
+          rate: number
+          unit?: number
+          updated_at?: string
+        }
+        Update: {
+          increment?: number
+          key?: string
+          minimum_amount?: number
+          name?: string
+          rate?: number
+          unit?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       product_variants: {
         Row: {
           active: boolean
@@ -319,7 +460,9 @@ export type Database = {
           instructions: string
           name: string
           popularity: number
+          pricing_type: string
           slug: string
+          sort_order: number
           status: Database["public"]["Enums"]["product_status"]
           stock: number
           updated_at: string
@@ -336,7 +479,9 @@ export type Database = {
           instructions?: string
           name: string
           popularity?: number
+          pricing_type?: string
           slug: string
+          sort_order?: number
           status?: Database["public"]["Enums"]["product_status"]
           stock?: number
           updated_at?: string
@@ -353,7 +498,9 @@ export type Database = {
           instructions?: string
           name?: string
           popularity?: number
+          pricing_type?: string
           slug?: string
+          sort_order?: number
           status?: Database["public"]["Enums"]["product_status"]
           stock?: number
           updated_at?: string
@@ -432,6 +579,7 @@ export type Database = {
     Functions: {
       create_order: {
         Args: {
+          p_credentials?: Json
           p_discord_username: string
           p_idempotency_key: string
           p_items: Json
@@ -459,12 +607,14 @@ export type Database = {
         Args: { p_identity: string; p_order_number: string }
         Returns: {
           created_at: string
+          items: string
           order_number: string
           payment_method: string
           payment_status: Database["public"]["Enums"]["payment_status"]
           roblox_username: string
           status: Database["public"]["Enums"]["order_status"]
           total_amount: number
+          updated_at: string
         }[]
       }
     }
@@ -478,6 +628,7 @@ export type Database = {
         | "cancelled"
         | "paid"
         | "expired"
+        | "refunded"
       payment_status: "pending" | "paid" | "failed" | "refunded" | "expired"
       product_status: "active" | "draft" | "archived"
     }
@@ -616,6 +767,7 @@ export const Constants = {
         "cancelled",
         "paid",
         "expired",
+        "refunded",
       ],
       payment_status: ["pending", "paid", "failed", "refunded", "expired"],
       product_status: ["active", "draft", "archived"],
