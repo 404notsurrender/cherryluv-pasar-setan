@@ -66,7 +66,10 @@ export const getPaymentStatus = createServerFn({ method: "POST" })
       if (data.verify) {
         const { verifyPakasirPaid } = await import("./pakasir.server");
         const r = await verifyPakasirPaid(order.order_number, order.total_amount);
-        if (r.paid) await supabaseAdmin.rpc("mark_order_paid", { p_order_number: order.order_number, p_amount: order.total_amount, p_reference: r.raw as never });
+        if (r.paid) {
+          const { data: newlyPaid } = await supabaseAdmin.rpc("mark_order_paid", { p_order_number: order.order_number, p_amount: order.total_amount, p_reference: r.raw as never });
+          if (newlyPaid) { const { notifyOrderPaid } = await import("./notify.server"); await notifyOrderPaid(order.order_number).catch(() => {}); }
+        }
       }
       await supabaseAdmin.rpc("expire_order", { p_order_number: order.order_number });
       order = await loadOwnOrder(context, data.orderNumber);

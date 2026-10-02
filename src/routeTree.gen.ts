@@ -19,6 +19,7 @@ import { Route as ShopRouteImport } from './routes/shop'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedAkunRouteImport } from './routes/_authenticated/akun'
 import { Route as AuthenticatedCheckoutRouteImport } from './routes/_authenticated/checkout'
+import { Route as KategoriSlugRouteImport } from './routes/kategori.$slug'
 import { Route as ProdukSlugRouteImport } from './routes/produk.$slug'
 import { Route as AuthenticatedBayarOrderIdRouteImport } from './routes/_authenticated/bayar.$orderId'
 import { Route as AuthenticatedPesananOrderIdRouteImport } from './routes/_authenticated/pesanan.$orderId'
@@ -73,6 +74,11 @@ const AuthenticatedCheckoutRoute = AuthenticatedCheckoutRouteImport.update({
   path: '/checkout',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const KategoriSlugRoute = KategoriSlugRouteImport.update({
+  id: '/kategori/$slug',
+  path: '/kategori/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProdukSlugRoute = ProdukSlugRouteImport.update({
   id: '/produk/$slug',
   path: '/produk/$slug',
@@ -107,6 +113,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AuthenticatedAdminRoute
   '/akun': typeof AuthenticatedAkunRoute
   '/checkout': typeof AuthenticatedCheckoutRoute
+  '/kategori/$slug': typeof KategoriSlugRoute
   '/produk/$slug': typeof ProdukSlugRoute
   '/bayar/$orderId': typeof AuthenticatedBayarOrderIdRoute
   '/pesanan/$orderId': typeof AuthenticatedPesananOrderIdRoute
@@ -122,6 +129,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AuthenticatedAdminRoute
   '/akun': typeof AuthenticatedAkunRoute
   '/checkout': typeof AuthenticatedCheckoutRoute
+  '/kategori/$slug': typeof KategoriSlugRoute
   '/produk/$slug': typeof ProdukSlugRoute
   '/bayar/$orderId': typeof AuthenticatedBayarOrderIdRoute
   '/pesanan/$orderId': typeof AuthenticatedPesananOrderIdRoute
@@ -139,6 +147,7 @@ export interface FileRoutesById {
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/akun': typeof AuthenticatedAkunRoute
   '/_authenticated/checkout': typeof AuthenticatedCheckoutRoute
+  '/kategori/$slug': typeof KategoriSlugRoute
   '/produk/$slug': typeof ProdukSlugRoute
   '/_authenticated/bayar/$orderId': typeof AuthenticatedBayarOrderIdRoute
   '/_authenticated/pesanan/$orderId': typeof AuthenticatedPesananOrderIdRoute
@@ -156,6 +165,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/akun'
     | '/checkout'
+    | '/kategori/$slug'
     | '/produk/$slug'
     | '/bayar/$orderId'
     | '/pesanan/$orderId'
@@ -171,6 +181,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/akun'
     | '/checkout'
+    | '/kategori/$slug'
     | '/produk/$slug'
     | '/bayar/$orderId'
     | '/pesanan/$orderId'
@@ -187,6 +198,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin'
     | '/_authenticated/akun'
     | '/_authenticated/checkout'
+    | '/kategori/$slug'
     | '/produk/$slug'
     | '/_authenticated/bayar/$orderId'
     | '/_authenticated/pesanan/$orderId'
@@ -201,6 +213,7 @@ export interface RootRouteChildren {
   KeranjangRoute: typeof KeranjangRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   ShopRoute: typeof ShopRoute
+  KategoriSlugRoute: typeof KategoriSlugRoute
   ProdukSlugRoute: typeof ProdukSlugRoute
   ApiPublicWebhooksPakasirRoute: typeof ApiPublicWebhooksPakasirRoute
 }
@@ -277,6 +290,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedCheckoutRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/kategori/$slug': {
+      id: '/kategori/$slug'
+      path: '/kategori/$slug'
+      fullPath: '/kategori/$slug'
+      preLoaderRoute: typeof KategoriSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/produk/$slug': {
       id: '/produk/$slug'
       path: '/produk/$slug'
@@ -335,6 +355,7 @@ const rootRouteChildren: RootRouteChildren = {
   KeranjangRoute: KeranjangRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   ShopRoute: ShopRoute,
+  KategoriSlugRoute: KategoriSlugRoute,
   ProdukSlugRoute: ProdukSlugRoute,
   ApiPublicWebhooksPakasirRoute: ApiPublicWebhooksPakasirRoute,
 }

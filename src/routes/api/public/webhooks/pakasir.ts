@@ -35,11 +35,12 @@ export const Route = createFileRoute("/api/public/webhooks/pakasir")({
         const v = await verifyPakasirPaid(order.order_number, order.total_amount);
         if (!v.paid) return new Response("Not verified", { status: 400 });
 
-        const { error } = await supabaseAdmin.rpc("mark_order_paid", {
+        const { data: newlyPaid, error } = await supabaseAdmin.rpc("mark_order_paid", {
           p_order_number: order.order_number, p_amount: order.total_amount,
           p_reference: { webhook: p, verification: v.raw } as never,
         });
         if (error) { console.error("mark_order_paid failed", error.message); return new Response("Error", { status: 500 }); }
+        if (newlyPaid) { const { notifyOrderPaid } = await import("@/lib/notify.server"); await notifyOrderPaid(order.order_number).catch(() => {}); }
         return new Response("ok");
       },
     },
