@@ -169,3 +169,68 @@ export const archiveProduct = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     return { ok: true };
   });
+async function assertAdmin(context: { supabase: any; userId: string }) {
+  const { data: isAdmin } = await context.supabase.rpc("has_role", { _user_id: context.userId, _role: "admin" });
+  if (!isAdmin) throw new Error("Akses admin diperlukan.");
+}
+
+export const getAdminExtras = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await assertAdmin(context);
+    const s = context.supabase;
+    const [rules, creds, notifs, cats, variants] = await Promise.all([
+      s.from("pricing_rules").select("*").order("key"),
+      s.from("order_credentials").select("order_id, roblox_username, roblox_password, backup_code, status, updated_at, orders(order_number, status, payment_status)").order("created_at", { ascending: false }),
+      s.from("notifications").select("id, channel, status, error, created_at, orders(order_number)").order("created_at", { ascending: false }).limit(100),
+      s.from("categories").select("id, name, slug, parent_id, sort_order, active").order("sort_order"),
+      s.from("product_variants").select("id, product_id, name, price, stock, active, sort_order").order("sort_order"),
+    ]);
+    return {
+      rules: (rules.data ?? []) as { key: string; name: string; rate: number; unit: number; minimum_amount: number; increment: number }[],
+      credentials: (creds.data ?? []) as unknown as { order_id: string; roblox_username: string; roblox_password: string | null; backup_code: string | null; status: string; updated_at: string; orders: { order_number: string; status: string; payment_status: string } | null }[],
+      notifications: (notifs.data ?? []) as unknown as { id: string; channel: string; status: string; error: string | null; created_at: string; orders: { order_number: string } | null }[],
+      categories: cats.data ?? [],
+      variants: variants.data ?? [],
+    };
+  });
+
+export const updatePricingRule = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((v) => z.object({ key: z.string().min(1).max(30), rate: z.number().int().min(1), unit: z.number().int().min(1), minimumAmount: z.number().int().min(1), increment: z.number().int().min(1) }).parse(v))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context);
+    const { error } = await context.supabase.from("pricing_rules").update({ rate: data.rate, unit: data.unit, minimum_amount: data.minimumAmount, increment: data.increment, updated_at: new Date().toISOString() }).eq("key", data.key);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
+export const updateVariant = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((v) => z.object({ id: z.string().uuid(), price: z.number().int().min(0), stock: z.number().int().min(0), active: z.boolean() }).parse(v))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context);
+    const { error } = await context.supabase.from("product_variants").update({ price: data.price, stock: data.stock, active: data.active }).eq("id", data.id);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
+export const updateCategory = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((v) => z.object({ id: z.string().uuid(), name: z.string().trim().min(2).max(60), active: z.boolean() }).parse(v))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context);
+    const { error } = await context.supabase.from("categories").update({ name: data.name, active: data.active }).eq("id", data.id);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
+export const clearCredentials = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((v) => z.object({ orderId: z.string().uuid() }).parse(v))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context);
+    const { error } = await context.supabase.from("order_credentials").update({ roblox_password: null, backup_code: null, status: "cleared", updated_at: new Date().toISOString() }).eq("order_id", data.orderId);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
