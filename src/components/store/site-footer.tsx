@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
-import { Cherry, Heart, MessageCircle } from "lucide-react";
+import { Heart, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import wolfLogo from "@/assets/wolf-logo.png.asset.json";
 
 export function SiteFooter() {
   return <footer className="mt-24 border-t border-border bg-footer text-footer-foreground">

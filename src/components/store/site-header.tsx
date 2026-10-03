@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
-import { Cherry, Menu, ShoppingBag, UserRound, X } from "lucide-react";
+import { Menu, ShoppingBag, UserRound, X } from "lucide-react";
+import wolfLogo from "@/assets/wolf-logo.png.asset.json";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useStore } from "./store-context";
