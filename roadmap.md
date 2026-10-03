@@ -5,5 +5,5 @@
 - [x] Koin / Gift Robux amount input, Robux Via Login form at checkout
 - [x] Admin tabs: orders, products & packages, categories, pricing, login data, notifications
 - [x] Telegram / Discord alerts on paid orders (code ready)
-- [ ] Telegram/Discord secrets — waiting on user
+- [x] Telegram/Discord secrets saved
 - [ ] Real end-to-end payment test — waiting on Pakasir production mode
