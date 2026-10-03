@@ -1,7 +1,9 @@
 # Roadmap
-- [ ] Create secure commerce schema and seed Pasar Setan catalog
-- [ ] Build shared storefront design system and navigation
-- [ ] Build home, catalog, product, cart, and checkout flows
-- [ ] Build customer auth, profile, order history, and tracking
-- [ ] Build protected admin dashboard and management actions
-- [ ] Verify build, responsive layouts, and central flows
+- [x] Commerce schema, catalog, storefront, checkout, tracking, admin
+- [x] Pakasir QRIS payments + webhook
+- [x] Category pages with breadcrumbs, 3 top categories on homepage
+- [x] Koin / Gift Robux amount input, Robux Via Login form at checkout
+- [x] Admin tabs: orders, products & packages, categories, pricing, login data, notifications
+- [x] Telegram / Discord alerts on paid orders (code ready)
+- [ ] Telegram/Discord secrets — waiting on user
+- [ ] Real end-to-end payment test — waiting on Pakasir production mode
