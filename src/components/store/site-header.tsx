@@ -28,6 +28,6 @@ export function SiteHeader() {
         <Button variant="ghost" size="icon" className="rounded-full md:hidden" onClick={() => setOpen((v) => !v)} aria-label="Buka menu">{open ? <X /> : <Menu />}</Button>
       </div>
     </div>
-    {open && <div className="border-t border-border bg-background px-4 py-4 md:hidden"><nav className="grid gap-2">{links.map(([label, to]) => <Button key={to} asChild variant="ghost" className="justify-start" onClick={() => setOpen(false)}><Link to={to}>{label}</Link></Button>)}<Button asChild variant="ghost" className="justify-start" onClick={() => setOpen(false)}><Link to={user ? "/akun" : "/auth"}>{user ? "Akun Saya" : "Masuk / Daftar"}</Link></Button>{user && <Button variant="ghost" className="justify-start" onClick={signOut}>Keluar</Button>}</nav></div>}
+    {open && <div className="border-t border-border bg-background px-4 py-4 md:hidden"><nav className="grid gap-2">{links.map(([label, to]) => <Button key={to} asChild variant="ghost" className="justify-start" onClick={() => setOpen(false)}><Link to={to}>{label}</Link></Button>)}<Button asChild variant="ghost" className="justify-start" onClick={() => setOpen(false)}><Link to={user ? "/akun" : "/auth"}>{user ? "Akun Saya" : "Masuk / Daftar"}</Link></Button>{user && <Button asChild variant="ghost" className="justify-start" onClick={() => setOpen(false)}><Link to="/profil">Pengaturan Profil</Link></Button>}{user && <Button variant="ghost" className="justify-start" onClick={signOut}>Keluar</Button>}</nav></div>}
   </header>;
 }
