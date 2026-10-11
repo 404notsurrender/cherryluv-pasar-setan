@@ -19,6 +19,7 @@ import { Route as ShopRouteImport } from './routes/shop'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedAkunRouteImport } from './routes/_authenticated/akun'
 import { Route as AuthenticatedCheckoutRouteImport } from './routes/_authenticated/checkout'
+import { Route as AuthenticatedProfilRouteImport } from './routes/_authenticated/profil'
 import { Route as KategoriSlugRouteImport } from './routes/kategori.$slug'
 import { Route as ProdukSlugRouteImport } from './routes/produk.$slug'
 import { Route as AuthenticatedBayarOrderIdRouteImport } from './routes/_authenticated/bayar.$orderId'
@@ -74,6 +75,11 @@ const AuthenticatedCheckoutRoute = AuthenticatedCheckoutRouteImport.update({
   path: '/checkout',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedProfilRoute = AuthenticatedProfilRouteImport.update({
+  id: '/profil',
+  path: '/profil',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const KategoriSlugRoute = KategoriSlugRouteImport.update({
   id: '/kategori/$slug',
   path: '/kategori/$slug',
@@ -113,6 +119,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AuthenticatedAdminRoute
   '/akun': typeof AuthenticatedAkunRoute
   '/checkout': typeof AuthenticatedCheckoutRoute
+  '/profil': typeof AuthenticatedProfilRoute
   '/kategori/$slug': typeof KategoriSlugRoute
   '/produk/$slug': typeof ProdukSlugRoute
   '/bayar/$orderId': typeof AuthenticatedBayarOrderIdRoute
@@ -129,6 +136,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AuthenticatedAdminRoute
   '/akun': typeof AuthenticatedAkunRoute
   '/checkout': typeof AuthenticatedCheckoutRoute
+  '/profil': typeof AuthenticatedProfilRoute
   '/kategori/$slug': typeof KategoriSlugRoute
   '/produk/$slug': typeof ProdukSlugRoute
   '/bayar/$orderId': typeof AuthenticatedBayarOrderIdRoute
@@ -147,6 +155,7 @@ export interface FileRoutesById {
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/akun': typeof AuthenticatedAkunRoute
   '/_authenticated/checkout': typeof AuthenticatedCheckoutRoute
+  '/_authenticated/profil': typeof AuthenticatedProfilRoute
   '/kategori/$slug': typeof KategoriSlugRoute
   '/produk/$slug': typeof ProdukSlugRoute
   '/_authenticated/bayar/$orderId': typeof AuthenticatedBayarOrderIdRoute
@@ -165,6 +174,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/akun'
     | '/checkout'
+    | '/profil'
     | '/kategori/$slug'
     | '/produk/$slug'
     | '/bayar/$orderId'
@@ -181,6 +191,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/akun'
     | '/checkout'
+    | '/profil'
     | '/kategori/$slug'
     | '/produk/$slug'
     | '/bayar/$orderId'
@@ -198,6 +209,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin'
     | '/_authenticated/akun'
     | '/_authenticated/checkout'
+    | '/_authenticated/profil'
     | '/kategori/$slug'
     | '/produk/$slug'
     | '/_authenticated/bayar/$orderId'
@@ -290,6 +302,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedCheckoutRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/profil': {
+      id: '/_authenticated/profil'
+      path: '/profil'
+      fullPath: '/profil'
+      preLoaderRoute: typeof AuthenticatedProfilRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/kategori/$slug': {
       id: '/kategori/$slug'
       path: '/kategori/$slug'
@@ -332,6 +351,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
   AuthenticatedAkunRoute: typeof AuthenticatedAkunRoute
   AuthenticatedCheckoutRoute: typeof AuthenticatedCheckoutRoute
+  AuthenticatedProfilRoute: typeof AuthenticatedProfilRoute
   AuthenticatedBayarOrderIdRoute: typeof AuthenticatedBayarOrderIdRoute
   AuthenticatedPesananOrderIdRoute: typeof AuthenticatedPesananOrderIdRoute
 }
@@ -340,6 +360,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminRoute: AuthenticatedAdminRoute,
   AuthenticatedAkunRoute: AuthenticatedAkunRoute,
   AuthenticatedCheckoutRoute: AuthenticatedCheckoutRoute,
+  AuthenticatedProfilRoute: AuthenticatedProfilRoute,
   AuthenticatedBayarOrderIdRoute: AuthenticatedBayarOrderIdRoute,
   AuthenticatedPesananOrderIdRoute: AuthenticatedPesananOrderIdRoute,
 }
